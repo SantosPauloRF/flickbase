@@ -8,6 +8,8 @@ const bodyParser = require("body-parser");
 const xss = require("xss-clean");
 const mongoSanitize = require("express-mongo-sanitize");
 
+const routes = require("./routes");
+
 const mongoURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}?retryWrites=true&w=majority`
 mongoose.connect(mongoURI)
 
@@ -20,6 +22,10 @@ mongoose.connect(mongoURI)
     //SANITIZE
     app.use(xss()); // to prevent xss atacks
     app.use(mongoSanitize()); // clean info to mongo
+
+{/* ROUTES */}
+
+app.use("/api", routes);
 
 
 
