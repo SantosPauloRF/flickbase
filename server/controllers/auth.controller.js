@@ -23,6 +23,24 @@ const authController = {
         } catch(err) {
             res.status(httpStatus.BAD_REQUEST).send(err.message)
         }
+    },
+    async signin(req, res, next){
+
+        try{
+            const { email, password } = req.body
+            const user = await authService.signInWithEmailAndPassword(email, password);
+            // token
+            const token = await authService.genAuthToken(user)
+
+            res.cookie("x-access-token", token)
+            .send({
+                user, 
+                token
+            })
+
+        } catch (err) {
+            res.status(httpStatus.BAD_REQUEST).send(err.message)
+        }
     }
 }
 
