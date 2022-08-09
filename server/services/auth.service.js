@@ -21,7 +21,13 @@ const createUser = async(email, password) =>{
         throw err;
     }
 }
+
+const genAuthToken = (user) => {
+    const token = user.generateAuthToken();
+    return token
+}
  
 module.exports = {
-    createUser
+    createUser,
+    genAuthToken
 }

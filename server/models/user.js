@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 require ("dotenv").config();
 
 const userSchema = mongoose.Schema ({
@@ -72,6 +73,15 @@ userSchema.statics.emailTaken = async function(email){
     return !!user //make the respons become boolean
 }
 
+userSchema.methods.generateAuthToken = function(){
+    let user = this;
+    const userObj = {
+        sub: user._id.toHexString(),
+        email: user.email
+    };
+    const token = jwt.sign(userObj, process.env.DB_SECRET, { expiresIn: "1d"})
+    return token
+}
 
 
 {/* MODELS */}
