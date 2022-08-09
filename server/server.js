@@ -8,6 +8,8 @@ const bodyParser = require("body-parser");
 const xss = require("xss-clean");
 const mongoSanitize = require("express-mongo-sanitize");
 
+const passport = require("passport")
+const { jwtSrategy } = require("./middlewares/passport")
 const { handleError, convertToApiError } = require("./middlewares/apiError")
 
 const routes = require("./routes");
@@ -16,19 +18,23 @@ const mongoURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD
 mongoose.connect(mongoURI)
 
 
-{/* GLOBAL MIDDLEWARES */}
+{/* MIDDLEWARES - PARSING */}
 
-    //PARSING
-    app.use(bodyParser.json());
+app.use(bodyParser.json());
 
-    //SANITIZE
-    app.use(xss()); // to prevent xss atacks
-    app.use(mongoSanitize()); // clean info to mongo
+{/* MIDDLEWARES - SANITIZE */}
+
+app.use(xss()); // to prevent xss atacks
+app.use(mongoSanitize()); // clean info to mongo
+
+{/* MIDDLEWARES - PASSPORTS /TOKEN VERIFICATION */}
+
+app.use(passport.initialize())
+passport.use("jwt", jwtSrategy)
 
 {/* ROUTES */}
 
 app.use("/api", routes);
-
 
 {/* ERROR HANDLING MIDDLEWARE */}
 
@@ -36,7 +42,6 @@ app.use(convertToApiError)
 app.use((err, req, res, next) => {
     handleError(err, res)
 })
-
 
 {/* STARTING SERVER */}
 const port = process.env.PORT || 3001;
