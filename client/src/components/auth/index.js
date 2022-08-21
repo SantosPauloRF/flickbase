@@ -1,20 +1,28 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom"
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { useDispatch, useSelector } from "react-redux";
-import { errorHelper } from '../../utils/tools';
+import { errorHelper, Loader } from '../../utils/tools';
 
 import Box from "@mui/material/Box"
 import Textfield from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
+import { registerUser, signInUser } from '../../store/actions/users';
+
 const Auth = () => {
 
     const [register, setRegister] = useState(false);
+    let navigate = useNavigate();
+
+    const users = useSelector((state) => state.users);
+    const notifications = useSelector(state => state.notifications)
+    const dispatch = useDispatch();
     
     const formik = useFormik({
-        initialValues:{email:'',password:''},
+        initialValues:{email:'faria.paulinhum@hotmail.com',password:'5071'},
         validationSchema: Yup.object({
             email: Yup.string()
             .required('Sorry the email is required')
@@ -30,16 +38,25 @@ const Auth = () => {
     const handleSubmit = (values) => {
         
         if(register){
-            console.log(values, "register")
+            dispatch(registerUser(values))
         } else {
-            console.log(values, "sign in")
+            dispatch(signInUser(values))
         }
-
     }
+
+    useEffect(() =>{
+        if(notifications && notifications.global.success){
+            navigate("/dashboard")
+        }
+    }, [notifications])
 
     return (
         <div className='auth_container'>
             <h1>Authenticate</h1>
+            {
+                users.loading ? 
+                <Loader /> :
+            
             <Box
                 sx={{
                     '& .MuiTextField-root': { width:'100%', marginTop:'20px' },
@@ -84,6 +101,7 @@ const Auth = () => {
                 </div>
 
             </Box>
+            }
         </div>
         
     );

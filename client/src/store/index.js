@@ -8,7 +8,7 @@ export const store = configureStore({
     reducer:{
         users: UsersReducer,
         articles: ArticlesReducer,
-        notification: NotificationsReducer,
+        notifications: NotificationsReducer,
         site: SiteReducer
     }
 })
