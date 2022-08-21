@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 require ("dotenv").config();
 
 const articleSchema = mongoose.Schema ({
@@ -54,7 +55,7 @@ const articleSchema = mongoose.Schema ({
 
 {/* MIDDLEWARES */}
 
-
+articleSchema.plugin(aggregatePaginate)
 {/* MODELS */}
 const Article = mongoose.model("Article", articleSchema );
 
