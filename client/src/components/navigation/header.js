@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import SideDrawer from "./sideNavigation";
 
 
 const Header = () => {
@@ -7,6 +8,7 @@ const Header = () => {
             <Link to="/" className='navbar-brand d-flex align-items-center fredoka_ff'>
                 Flickbase
             </Link>
+            <SideDrawer />
         </nav>
     );
   };
