@@ -20,7 +20,7 @@ export const registerUser = createAsyncThunk(
     }
     )
 
-    export const signInUser = createAsyncThunk(
+export const signInUser = createAsyncThunk(
         "users/signInUser",
         async({email, password}, {dispatch}) => {
             try {
@@ -46,5 +46,11 @@ export const isAuth = createAsyncThunk(
         }catch(err){
             return {data: {}, auth: false}
         }
+    }
+)
+export const signOut = createAsyncThunk(
+    "users/signOut",
+    async() =>{
+        removeTokenCookie();
     }
 )

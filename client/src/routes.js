@@ -12,6 +12,8 @@ import Header from "./components/navigation/header";
 import MainLayout from "./hoc/mainLayout";
 import Auth from "./components/auth";
 
+import AuthGuard from "./hoc/authGuard";
+
 function Router() {
 
   const [loading, setLoading] = useState(true);
@@ -23,26 +25,30 @@ function Router() {
   },[])
   
   useEffect(() => {
-    if(users.auth != null){
+    if(users.auth !== null){
       setLoading(false)
     }
   },[users])
 
   return (
     <BrowserRouter>
-      {
-        loading ?
-          <Loader /> :
-          <>
-          <Header />
-          <MainLayout>
-            <Routes>
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/" element={<Home />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-            </Routes>
-          </MainLayout>
-          </>
+      {loading ?
+        <Loader /> 
+        :
+        <>
+        <Header />
+        <MainLayout>
+          <Routes>
+            <Route path="/dashboard" element={
+              <AuthGuard>
+                <Dashboard />
+              </AuthGuard>
+            } />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </MainLayout>
+        </>
       }
     </BrowserRouter>
   );
