@@ -17,6 +17,7 @@ import Dashboard from "./components/dashboard";
 import AdminProfile from "./components/dashboard/profile";
 import AdminArticles from "./components/dashboard/articles";
 import DashboardMain from "./components/dashboard/main";
+import AddArticle from "./components/dashboard/articles/edit_add/add";
 //GUARDS
 import AuthGuard from "./hoc/authGuard";
 
@@ -54,6 +55,7 @@ function Router() {
               <Route index element={<DashboardMain />} />
               <Route path="profile" element={<AdminProfile />} />
               <Route path="articles" element={<AdminArticles />} />
+              <Route path="articles/add" element={<AddArticle />} />
             </Route>
 
             <Route path="/auth" element={<Auth />} />
