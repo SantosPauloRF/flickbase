@@ -30,6 +30,11 @@ export const showToast = (type, msg) => {
     }
 }
 
+export const AdminTitle = ({title}) => (
+    <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom'>
+        <h1 className='h2'>{title}</h1>
+    </div>
+)
 export const getTokenCookie = () => cookie.load("x-access-token");
 export const removeTokenCookie = () => cookie.remove("x-access-token", {path: "/"});
 export const getAuthHeader = () => {
