@@ -32,7 +32,6 @@ export const getAdminArticle = createAsyncThunk (
         }
     }
 )
-
 export const updateArticle = createAsyncThunk(
     "articles/updateArticle",
     async({values, articleId}, {dispatch}) => {
@@ -46,4 +45,21 @@ export const updateArticle = createAsyncThunk(
         }
     }
 )
+export const getPaginateArticles = createAsyncThunk(
+    "articles/getPaginateArticles",
+    async({page=1, limit=5, keywords=""}, {dispatch}) => {
+        try {
+            const request = await axios.post("/api/articles/admin/paginate", {
+                page,
+                limit,
+                keywords
+            }, getAuthHeader())
+            return request.data
+        } catch(err) {
+            dispatch(errorGlobal(err.response.data.message))
+            throw err
+        }
+    }
+)
+
 
