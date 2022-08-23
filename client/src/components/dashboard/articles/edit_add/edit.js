@@ -1,15 +1,15 @@
 // lib
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useFormik, FieldArray, FormikProvider } from 'formik';
-import { useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 // comp
 import { AdminTitle } from '../../../../utils/tools';
 import { errorHelper, Loader } from '../../../../utils/tools'
 import { validation, formValues } from './validationSchema'
 import WYSIWYG from '../../../../utils/form/wysiwyg';
 // redux
-import { useDispatch, useSelector } from 'react-redux';
-import { addArticle } from '../../../../store/actions/articles';
+import { useDispatch } from 'react-redux';
+
 
 // MUI
 import TextField from '@mui/material/TextField'
@@ -23,30 +23,40 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
- 
 import InputLabel from '@mui/material/InputLabel';
 import AddIcon from '@mui/icons-material/Add';
-// import { visuallyHidden } from '@mui/utils';
+import { getAdminArticle, updateArticle } from '../../../../store/actions/articles';
 
-const AddArticle = () => {
+
+const EditArticle = () => {
+
+    const [loading, setLoading] = useState(true)
+    const [formaData, setFormData] = useState(formValues)
     const [editorBlur, setEditorBlur] = useState(false)
+    const [editorContent, setEditorContent] = useState(null)
 
-    const articles = useSelector(state => state.articles);
+    let { articleId } = useParams();
+    const actorsValue = useRef();
     const dispatch = useDispatch();
 
-    const actorsValue = useRef();
-    let navigate = useNavigate()
+
+    useEffect(() => {
+        dispatch(getAdminArticle(articleId))
+        .unwrap()
+        .then(response => {
+            setLoading(false)
+            setFormData(response)
+            setEditorContent(response.content)
+        })
+
+    }, [articleId])
 
     const formik = useFormik({
         enableReinitialize:true,
-        initialValues: formValues,
+        initialValues: formaData,
         validationSchema: validation,
         onSubmit:(values => {
-            dispatch(addArticle(values))
-            .unwrap()
-            .then(() =>{
-                navigate("/dashboard/articles")
-            })
+            dispatch(updateArticle({values, articleId}))
         })
     })
 
@@ -60,7 +70,10 @@ const AddArticle = () => {
 
     return (
         <>
-            <AdminTitle title="Add article" />
+            <AdminTitle title="Edit article" />
+            { loading ?
+                <Loader />
+            :    
             <form className='mt-3 article_form' onSubmit={formik.handleSubmit}>
                 <div className='form-group'>
                     <TextField
@@ -78,6 +91,7 @@ const AddArticle = () => {
                         setEditorBlur={(blur) => handleEditorBlur(blur)}
                         onError={formik.errors.content}
                         editorBlur={editorBlur}
+                        editorContent={editorContent}
                     />
                     { formik.errors.content || (formik.errors.content && editorBlur) ?
                         <FormHelperText error={true}>
@@ -190,21 +204,20 @@ const AddArticle = () => {
 
                 <Divider className='mt-3 mb-3'/>
 
-                { articles.loading ?
-                    <Loader /> 
-                :
-                    <Button
-                        variant='contained'
-                        color="primary"
-                        type="submit"
-                    >
-                        Add article
-                    </Button>
-                }
+               
+                <Button
+                    variant='contained'
+                    color="primary"
+                    type="submit"
+                >
+                    Edit article
+                </Button>
+                
 
             </form>    
+            }    
         </>
     )
 }
 
-export default AddArticle
+export default EditArticle
