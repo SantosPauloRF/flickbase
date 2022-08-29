@@ -1,4 +1,4 @@
-import { Table, Pagination } from "react-bootstrap";
+import { Table, Pagination, Alert } from "react-bootstrap";
 import { Loader } from "../../../utils/tools";
 import Moment from "react-moment";
 
@@ -6,7 +6,10 @@ const PaginateComponent = ({
   articles, 
   goToPrevPage, 
   goToNextPage,
-  goToEdit 
+  goToEdit,
+  handleStatusChange,
+  handleShow,
+  // handleDelete 
 }) => {
 
 
@@ -33,7 +36,7 @@ const PaginateComponent = ({
                   <td>{item.score}</td>
                   <td
                     className="action_btn remove_btn"
-                    onClick={() => alert("REMOVE")}
+                    onClick={() => handleShow(item._id)}
                   >
                     Remove
                   </td>
@@ -45,7 +48,7 @@ const PaginateComponent = ({
                   </td>
                   <td
                     className="action_btn status_btn"
-                    onClick={() => alert("change status")}
+                    onClick={() => handleStatusChange(item.status, item._id)}
                   >
                     {item.status}
                   </td>

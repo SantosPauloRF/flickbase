@@ -4,7 +4,7 @@ import { AdminTitle } from "../../../utils/tools";
 import PaginateComponent from "./paginate";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getPaginateArticles } from "../../../store/actions/articles";
+import { getPaginateArticles, changeStatusArticle, removeArticle } from "../../../store/actions/articles";
 
 import {
   Modal,
@@ -22,19 +22,49 @@ const AdminArticles = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [removeAlert, setRemoveAlert] = useState(false)
+  const [toRemove, setToRemove] = useState(null)
+
+  const handleClose = () => {
+    setRemoveAlert(false)
+  }
+
+  const handleShow = (id=null) => {
+    setToRemove(id)
+    setRemoveAlert(true)
+  }
+
+ 
+
   /// PAGINATION COMANDS
   const goToPrevPage = (page) => { 
-
+    
     dispatch(getPaginateArticles({page}))
   }
   const goToNextPage = (page) => { 
-
+    
     dispatch(getPaginateArticles({page}))
   }
-
+  
   const goToEdit = (id) => {
     navigate(`/dashboard/articles/edit/${id}`)
   }
+  const handleStatusChange = (status, _id) => {
+    let newStatus = status === "draft" ? "public" : "draft"
+    dispatch(changeStatusArticle({newStatus, _id} ))
+
+  }
+  const handleDelete = () => {
+    dispatch(removeArticle(toRemove))
+    .unwrap()
+    // .then()  -> execut after promise is resolver
+    // .catch()  -> gonna execute if you catch an error
+    .finally(() => {   // -> always gonna execute
+      setRemoveAlert(false)
+      setToRemove(null)
+    })
+  }
+  /// PAGINATION COMANDS
 
   useEffect(() => {
     dispatch(getPaginateArticles({}))
@@ -62,9 +92,30 @@ const AdminArticles = () => {
           goToPrevPage={(page) => goToPrevPage(page)}
           goToNextPage={(page) => goToNextPage(page)}
           goToEdit={(id) => goToEdit(id)}
+          handleStatusChange={(status, id) => handleStatusChange(status, id)}
+          handleShow={(id) => handleShow(id)}
+          // handleDelete={(_id) => handleDelete(_id)}
         />
             
       </div>
+
+      <Modal show={removeAlert} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title> Are you really sure ?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          There is no going back.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleClose}>
+            Oops, close this.
+          </Button>
+          <Button variant='danger' onClick={()=>handleDelete()}>
+            Delete
+          </Button>
+        </Modal.Footer>
+        
+      </Modal>
     </>
   );
 };

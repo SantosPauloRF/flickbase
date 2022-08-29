@@ -1,11 +1,12 @@
 import { AdminTitle } from "../../../utils/tools"
+import UserProfile from "./profile"
 
 const AdminProfile = () => {
     return (
       <>
-    <AdminTitle title="Profile" />
-    <div>Welcome to the AdminProfile page</div>
-    </>
+      <AdminTitle title="Profile" />
+      <UserProfile />
+      </>
     )
   }
   

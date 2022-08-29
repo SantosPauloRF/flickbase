@@ -3,7 +3,8 @@ import {
     registerUser,
     signInUser,
     isAuth,
-    signOut
+    signOut,
+    updateUserProfile
  } from "../actions/users"
 
 let DEFAULT_USER_STATE = {
@@ -59,6 +60,11 @@ export const usersSlice = createSlice({
         .addCase(signOut.fulfilled, (state) => {
             state.data = DEFAULT_USER_STATE;
             state.auth = false;
+            
+        })
+        //UPDATE PROFILE
+        .addCase(updateUserProfile.fulfilled, (state, action) => {
+            state.data = {...state, ...action.payload}
             
         })
     }
