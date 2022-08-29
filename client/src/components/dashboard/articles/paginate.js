@@ -2,7 +2,15 @@ import { Table, Pagination } from "react-bootstrap";
 import { Loader } from "../../../utils/tools";
 import Moment from "react-moment";
 
-const PaginateComponent = ({ articles }) => {
+const PaginateComponent = ({ 
+  articles, 
+  goToPrevPage, 
+  goToNextPage,
+  goToEdit 
+}) => {
+
+
+
   return (
     <>
       {articles && articles.docs ? (
@@ -31,7 +39,7 @@ const PaginateComponent = ({ articles }) => {
                   </td>
                   <td
                     className="action_btn edit_btn"
-                    onClick={() => alert("GO TO EDIT")}
+                    onClick={() => goToEdit(item._id)}
                   >
                     Edit
                   </td>
@@ -46,24 +54,36 @@ const PaginateComponent = ({ articles }) => {
             </tbody>
           </Table>
           <Pagination>
-            {articles.hasPrevPage ? (
+            {articles.hasPrevPage ? 
               <>
-                <Pagination.Prev />
-                <Pagination.Item>{articles.prevPage}</Pagination.Item>
+                <Pagination.Prev 
+                  onClick={() => goToPrevPage(articles.prevPage)}
+                  />
+                <Pagination.Item
+                  onClick={() => goToPrevPage(articles.prevPage)}
+                  >
+                  {articles.prevPage}
+                </Pagination.Item>
               </>
-            ) : null}
+            : null}
             <Pagination.Item active>{articles.page}</Pagination.Item>
-            {articles.hasNextPage ? (
+            {articles.hasNextPage ? 
               <>
-                <Pagination.Item>{articles.nextPage}</Pagination.Item>
-                <Pagination.Next />
+                <Pagination.Item
+                  onClick={() => goToNextPage(articles.nextPage)}
+                  >
+                  {articles.nextPage}
+                </Pagination.Item>
+                <Pagination.Next 
+                  onClick={() => goToNextPage(articles.nextPage)}
+                />
               </>
-            ) : null}
+             : null}
           </Pagination>
         </>
       ) : (
         <Loader />
-      )} 
+      )}
     </>
   );
 };
