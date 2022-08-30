@@ -71,3 +71,25 @@ export const updateUserProfile = createAsyncThunk(
         }
     }
 )
+export const changeEmail = createAsyncThunk(
+    "users/changeEmail",
+    async(data, {dispatch}) =>{
+        try{
+            const request = await axios.patch("/api/users/email", {
+                email: data.email,
+                newemail: data.newemail
+            }, getAuthHeader())
+
+            dispatch(successGlobal("Email Updated!!"))
+            return {
+                email: request.data.user.email,
+                verified: false
+            }
+            
+        } catch (err) {
+            dispatch(errorGlobal(err.response.data.message))
+            throw err
+        }
+    }
+)
+
