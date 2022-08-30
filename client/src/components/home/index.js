@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 // redux
 import { useDispatch, useSelector} from 'react-redux' 
 import { homeLoadMore } from '../../store/actions/articles';
+import { clearCurrent } from '../../store/reducers/articles';
 
 
 
@@ -15,7 +16,7 @@ const Home = () => {
     const dispatch = useDispatch();
 
     useEffect(()=> {
-
+      dispatch(clearCurrent())
       if (articles.articles.length <= 0){
         dispatch(homeLoadMore(articles.homeSort))
       }

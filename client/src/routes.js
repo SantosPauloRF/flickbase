@@ -12,6 +12,7 @@ import Home from "./components/home";
 import Header from "./components/navigation/header";
 import MainLayout from "./hoc/mainLayout";
 import Auth from "./components/auth";
+import Article from "./components/articles/article";
 //DASHBOARD PAGES
 import Dashboard from "./components/dashboard";
 import AdminProfile from "./components/dashboard/profile";
@@ -60,6 +61,7 @@ function Router() {
               <Route path="articles/edit/:articleId" element={<EditArticle />} />
             </Route>
 
+            <Route path="/articles/article/:id" element={<Article />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/" element={<Home />} />
           </Routes>

@@ -87,7 +87,6 @@ export const changeStatusArticle = createAsyncThunk(
         }
     }
 )
-
 export const removeArticle = createAsyncThunk(
     "articles/removeArticle",
     async(_id, {dispatch, getState}) => {
@@ -117,6 +116,19 @@ export const homeLoadMore = createAsyncThunk(
 
             return { newState, sort }
 
+        } catch(err) {
+            dispatch(errorGlobal(err.response.data.message))
+            throw err
+        }
+    }
+)
+export const getArticle = createAsyncThunk(
+    "articles/getArticle",
+    async(id, {dispatch}) => {
+        try {
+            const request = await axios.get(`/api/articles/users/article/${id}`)
+            
+            return request.data
         } catch(err) {
             dispatch(errorGlobal(err.response.data.message))
             throw err
