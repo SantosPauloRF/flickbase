@@ -43,6 +43,14 @@ app.use((err, req, res, next) => {
     handleError(err, res)
 })
 
+app.use(express.static("client/build"))
+if(process.env.NODE_ENV === "production"){
+
+    app.get("/*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"))
+    })
+}
+
 {/* STARTING SERVER */}
 const port = process.env.PORT || 3001;
 
